@@ -11,16 +11,37 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 @Mod.EventBusSubscriber(modid = PsychoArtifacts.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class StarOfTonyItem extends Item {
     private static final int CROP_RIPENING_RADIUS = 10;
     private static final int DENY_MOB_SPAWNING_RADIUS = 32;
+
+    private static final Set<Class<? extends Block>> RIPENABLE_BLOCKS = Stream.of(
+            CropBlock.class,
+            StemBlock.class,
+            SweetBerryBushBlock.class,
+            CocoaBlock.class,
+            MushroomBlock.class,
+            NetherWartBlock.class,
+            SugarCaneBlock.class,
+            BambooSaplingBlock.class,
+            BambooStalkBlock.class,
+            CactusBlock.class,
+            SaplingBlock.class,
+            FungusBlock.class,
+            ChorusFlowerBlock.class
+    ).collect(Collectors.toSet());
 
     public StarOfTonyItem(Properties pProperties) {
         super(pProperties);
@@ -42,9 +63,12 @@ public class StarOfTonyItem extends Item {
                 centerPos.offset(CROP_RIPENING_RADIUS, 2, CROP_RIPENING_RADIUS)
         ).forEach(pos -> {
             BlockState state = level.getBlockState(pos);
-            state.randomTick((ServerLevel) level, pos, level.random);
-            state.randomTick((ServerLevel) level, pos, level.random);
-            state.randomTick((ServerLevel) level, pos, level.random);
+            Block block = state.getBlock();
+            if (RIPENABLE_BLOCKS.contains(block.getClass())) {
+                for (int i = 0; i < 5; i++) {
+                    state.randomTick((ServerLevel) level, pos, level.random);
+                }
+            }
         });
     }
 
