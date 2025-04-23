@@ -19,15 +19,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Mod.EventBusSubscriber(modid = PsychoArtifacts.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class StarOfTonyItem extends Item {
     private static final int CROP_RIPENING_RADIUS = 10;
     private static final int DENY_MOB_SPAWNING_RADIUS = 32;
 
-    private static final Set<Class<? extends Block>> RIPENABLE_BLOCKS = Stream.of(
+    private static final Set<Class<? extends Block>> RIPENABLE_BLOCKS = Set.of(
             CropBlock.class,
             StemBlock.class,
             SweetBerryBushBlock.class,
@@ -41,7 +39,7 @@ public class StarOfTonyItem extends Item {
             SaplingBlock.class,
             FungusBlock.class,
             ChorusFlowerBlock.class
-    ).collect(Collectors.toSet());
+    );
 
     public StarOfTonyItem(Properties pProperties) {
         super(pProperties);
